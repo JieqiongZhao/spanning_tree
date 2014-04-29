@@ -1,0 +1,23 @@
+@charset "utf-8";
+
+body {
+	background-color: #fff473;
+	text-align: center;
+}
+
+section {
+	margin: auto;
+	width: 1000px;
+	background-color: #b30025;
+}
+
+p {
+	font-family: "Courier New", Courier, monospace;
+}
+
+h1 {
+	font-family: "Courier New", Courier, monospace;
+	font-size: x-large;
+}
+
+#pjs:focus{ outline: none;}
