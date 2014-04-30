@@ -3,17 +3,20 @@ class MyEdge {
 	int thickness;
 	float originalLen;	//spring's original length
 	float currentLen;	//spring's current length
+	boolean block;	//whether the designated port is blocked or not
 
 	MyEdge() {
-
+		block = false;
 	}
 
 	MyEdge(float x1, float y1, float x2, float y2) {
 		setPosition(x1, y1, x2, y2);
+		block = false;
 	}
 
 	MyEdge(float len) {
 		setOriginalLen(len);
+		block = false;
 	}
 
 	public void setPosition(float x1, float y1, float x2, float y2) {
@@ -21,6 +24,10 @@ class MyEdge {
 		this.y1 = y1;
 		this.x2 = x2;
 		this.y2 = y2;
+	}
+
+	public void setBlock(boolean status) {
+		block = status;
 	}
 
 	public float getX1() {
@@ -63,8 +70,12 @@ class MyEdge {
 		} else {
 			strokeWeight(1);
 		}
-
-		line(x1,y1,x2,y2);
-		
+		if (this.block) {
+			stroke(255, 0, 0);
+			strokeWeight(4);
+			line(x1,y1,x2,y2);
+		} else {
+			line(x1,y1,x2,y2);
+		}
 	}
 }

@@ -10,7 +10,6 @@ class MyNode {
 	float mass;	//node's mass
 	ArrayList<MyEdge> edges;	//node's linked edge
 	ArrayList<MyNode> neighbors;	//node's neighbors
-	ArrayList<BPDU> sentoutPackages;	//node's send out BPDU
 
 	MyNode(int id) {
 		this.id = id;
@@ -161,6 +160,7 @@ class MyNode {
 	}
 
 	public void render() {
+		strokeWeight(1);
 		if(this.isect) {
 			color c = #FF4900;
 			stroke(0);

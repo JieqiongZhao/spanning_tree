@@ -10,6 +10,7 @@ class BPDU {
 	float pct;
 	boolean arriveMid, arriveEnd;
 	boolean sendStatus;
+	boolean forwardingStatus;
 
 
 	BPDU (String rootId, int cost, String bridgeId) {
@@ -20,6 +21,36 @@ class BPDU {
 		//step = random(0.001, 0.010);
 		step = 0.01;
 		pct = 0.0;
+		forwardingStatus = true;
+	}
+
+	BPDU (String senderId, String destinationId) {
+		this.senderId = senderId;
+		this.destinationId = destinationId;
+		updateBPDU("", 0, "");
+		arriveMid = false;
+		arriveEnd = false;
+		sendStatus = true;
+		//step = random(0.001, 0.010);
+		step = 0.01;
+		pct = 0.0;
+		forwardingStatus = true;
+	} 
+
+	public void setSenderId( String senderId) {
+		this.senderId = senderId;
+	}
+
+	public String getSenderId() {
+		return this.senderId;
+	}
+
+	public void setDestinationId(String destinationId) {
+		this.destinationId = destinationId;
+	}
+
+	public String getDestinationId() {
+		return this.destinationId;
 	}
 
 	public void setRootId(String rootId) {
@@ -75,6 +106,14 @@ class BPDU {
 		this.sendStatus = status;
 	}
 
+	public boolean getForwardingStatus() {
+		return this.forwardingStatus;
+	}
+
+	public void setForwardingStatus(boolean status) {
+		this.forwardingStatus = status;
+	}
+
 	public void updateBPDU(String rootId, int cost, String bridgeId) {
 		this.rootId = rootId;
 		this.cost = cost;
@@ -82,6 +121,9 @@ class BPDU {
 	}
 
 	public void move(Vector start, Vector mid, Vector end) {
+		if (!forwardingStatus) {
+			return;
+		}
 		if (sendStatus) {
 			//package in send mode
 			if (!arriveMid) {
@@ -190,11 +232,12 @@ class BPDU {
 
 	public void render() {
 		noStroke();
-		fill(#7AE969);
+		fill(#2419B2);
 		ellipse(this.x, this.y, 10, 10);
 	}
 
 	public void showContent() {
+		strokeWeight(1);
 		stroke(0);
 		fill(255);
 		String content = this.rootId + "  " + this.cost + "  " + this.bridgeId;

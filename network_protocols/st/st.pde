@@ -34,6 +34,7 @@ float total_kinetic_energy = 1.0;
 float springLength = 40;
 
 boolean graph_init = false; //initialization finished or not
+boolean convergence = false; //whether the distributed spanning tree algorithm finished or not
 
 
 void setup() {
@@ -45,10 +46,10 @@ void setup() {
 	frameRate(200);
 
 	//test BPDU
-	BPDU p1 = new BPDU("B1", 2, "B2");
-	BPDU p2 = new BPDU("B1", 2, "B5");
-	int compareResult = p1.compare(p2);
-	println("Compare Result of BPDU: " + compareResult);
+	// BPDU p1 = new BPDU("B1", 2, "B2");
+	// BPDU p2 = new BPDU("B1", 2, "B5");
+	// int compareResult = p1.compare(p2);
+	// println("Compare Result of BPDU: " + compareResult);
 
 	// int compareResult = p1.compareStringIgnoreCase("1d", "abc");
 	// println("Compare Result of Tow Strings: " + compareResult);
@@ -63,10 +64,19 @@ void draw() {
   		//cdlculate force/verlocity/ect and update postion of all nodes
   		dynamicMove();
   	} else {
-  		graph_init = true;
-  		frameRate(60);
-  		//nodelist.get(0).sendBPDU();
+  		if (convergence) {
+  			console.log("-------------");
+  		} else {
+	  		graph_init = true;
+	  		frameRate(60);
+	  		//nodelist.get(0).sendBPDU();
+	  		if(checkConvergence()) {
+	  			convergence = true;
+	  		}
+	  	}
   	}
+
+
 }
 
 //initalize the topology of network graph
@@ -138,6 +148,18 @@ MyNode getNodeByName(String name) {
 	return null;
 }
 
+boolean checkConvergence() {
+	boolean converged = true;
+	for (MyNode tmpNode : nodelist) {
+		if (tmpNode.getDeviceType() == 0) {
+			if (!tmpNode.getConverge()) {
+				converged = false;
+			}
+		}
+	}
+	return converged;
+}
+
 void drawNodes() {
   	for(int i = 0; i < nodelist.size(); i++) {
     	nodelist.get(i).render();
@@ -164,6 +186,9 @@ void drawEdges(ArrayList<MyNode> visited, MyNode node) {
 			float x2 = nebs.get(i).getX() + vr.getX();
 			float y2 = nebs.get(i).getY() + vr.getY();
 			if(edges.get(i) != null) {
+				// if (node.getDeviceType() == 1 && nebs.get(i).getDeviceType() == 0) {
+				// 	edges.get(i).setBlock(true);
+				// }
 				edges.get(i).setPosition(x1, y1, x2, y2);
 				edges.get(i).render();
 			}
